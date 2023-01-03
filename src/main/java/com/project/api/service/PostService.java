@@ -5,7 +5,9 @@ import com.project.api.dto.DeletePostRequest;
 import com.project.api.dto.PostResponse;
 import com.project.api.dto.UpdatePostRequest;
 import com.project.api.entity.Post;
+import com.project.api.entity.User;
 import com.project.api.repository.PostRepository;
+import com.project.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public List<PostResponse> getPosts() {
@@ -31,7 +34,8 @@ public class PostService {
 
     @Transactional
     public void createPost(CreatePostRequest createPostRequest) {
-        Post post = new Post(createPostRequest.getTitle(), createPostRequest.getWriter(), createPostRequest.getPassword(), createPostRequest.getContent());
+        User user = userRepository.findByUsername(createPostRequest.getWriter().getUsername()).orElseThrow(() -> new IllegalArgumentException(" 값 없음"));
+        Post post = new Post(createPostRequest.getTitle(), user, createPostRequest.getPassword(), createPostRequest.getContent());
         postRepository.save(post);
     }
 
@@ -44,8 +48,9 @@ public class PostService {
     @Transactional
     public void updatePost(Long postId, UpdatePostRequest updatePostRequest) {
         Post postSaved = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("id 없음"));
+
         if (postSaved.isValidPassword(updatePostRequest.getPassword())) {
-            postSaved.update(updatePostRequest.getTitle(), updatePostRequest.getWriter(), updatePostRequest.getContent());
+            postSaved.update(updatePostRequest.getTitle(), updatePostRequest.getContent());
             postRepository.save(postSaved); // update 로 변경된 나머지를 다시 DB에 저장
         } else {
             throw new IllegalArgumentException("패스워트가 다릅니다");
