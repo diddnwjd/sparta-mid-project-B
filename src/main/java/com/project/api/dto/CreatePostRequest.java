@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor  // Getter 와 NoArgsConstructor 를 사용하면 알아서 데이터까 들어감
 public class CreatePostRequest {
     private String title;
-    private User writer;
+    private String username;
     private String password;
     private String content;
 
-    public CreatePostRequest(String title, User writer, String password, String content) {
+    public CreatePostRequest(String title, String username, String password, String content) {
         this.title = title;
-        this.writer = writer;
+        this.username = username;
         this.password = password;
         this.content = content;
     }

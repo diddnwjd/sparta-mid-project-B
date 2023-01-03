@@ -14,6 +14,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+
     @PostMapping("/api/signup")
     public CreateUserResponse createUser(@RequestBody @Valid CreateUserRequest createUserRequest) {
         userService.createUser(createUserRequest);
