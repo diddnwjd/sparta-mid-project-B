@@ -2,10 +2,7 @@ package com.project.api.entity;
 
 import lombok.Getter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
@@ -18,13 +15,17 @@ public class Post extends TimeStamped {
 
     private Long id;
     private String title;
-    private String writer;
+
+    @ManyToOne
+    @JoinColumn(name = "username")
+    private User writer;
+
     private String password;
     private String content;
 
     public Post() {}
 
-    public Post(String title, String writer, String password, String content) {
+    public Post(String title, User writer, String password, String content) {
 
         this.title = title;
         this.writer = writer;
@@ -32,10 +33,9 @@ public class Post extends TimeStamped {
         this.content = content;
     }
 
-    public void update(String title, String writer, String content) {
+    public void update(String title, String content) {
 
         this.title = title;
-        this.writer = writer;
         this.content = content;
     }
 
