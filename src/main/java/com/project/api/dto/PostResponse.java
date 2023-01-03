@@ -15,7 +15,7 @@ public class PostResponse {
 
     public PostResponse(Post post) {
         this.title = post.getTitle();
-        this.writer = post.getWriter();
+        this.writer = post.getWriter().getUsername();
         this.content = post.getContent();
         this.createAt = post.getCreateAt();
     }

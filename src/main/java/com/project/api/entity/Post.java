@@ -16,7 +16,7 @@ public class Post extends TimeStamped {
     private Long id;
     private String title;
 
-    @ManyToOne
+    @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "username")
     private User writer;
 

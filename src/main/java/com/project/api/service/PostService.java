@@ -34,7 +34,7 @@ public class PostService {
 
     @Transactional
     public void createPost(CreatePostRequest createPostRequest) {
-        User user = userRepository.findByUsername(createPostRequest.getWriter().getUsername()).orElseThrow(() -> new IllegalArgumentException(" 값 없음"));
+        User user = userRepository.findByUsername(createPostRequest.getUsername()).orElseThrow(() -> new IllegalArgumentException("없는 유저 입니다"));
         Post post = new Post(createPostRequest.getTitle(), user, createPostRequest.getPassword(), createPostRequest.getContent());
         postRepository.save(post);
     }
