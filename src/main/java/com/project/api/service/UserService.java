@@ -21,10 +21,9 @@ public class UserService {
 
     @Transactional
     public void createUser(CreateUserRequest createUserRequest) {
-        String username = createUserRequest.getUsername();
-        Optional<User> found = userRepository.findByUsername(username);
-        if (found.isPresent()) {
-            throw new IllegalArgumentException("중복된 이름입니다.");
+        Optional<User> checkUser = userRepository.findByUsername(createUserRequest.getUsername());
+        if (checkUser.isPresent()) {
+            throw new IllegalArgumentException("유저가 존재합니다");
         }
 
         UserRoleEnum role = UserRoleEnum.USER;
@@ -34,12 +33,12 @@ public class UserService {
             }
             role = UserRoleEnum.ADMIN;
         }
-        User user = new User(createUserRequest.getUsername(), createUserRequest.getPassword(), createUserRequest.getRole());
+        User user = new User(createUserRequest.getUsername(), createUserRequest.getPassword(), role);
         userRepository.save(user);
     }
 
     @Transactional(readOnly = true)
-    public String loginUser(LoginUserRequest loginUserRequest) {  // void -> JwtInfo
+    public String loginUser(LoginUserRequest loginUserRequest) {
         String username = loginUserRequest.getUsername();
         String password = loginUserRequest.getPassword();
 
@@ -51,7 +50,7 @@ public class UserService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
-        String generatedToken = jwtUtil.createToken(user.getUsername(), user.getRole());   // 로그인 관련된 비즈니스 처리는 여기서
+        String generatedToken = jwtUtil.createToken(user.getUsername(), user.getRole());
         return generatedToken;
     }
 }
