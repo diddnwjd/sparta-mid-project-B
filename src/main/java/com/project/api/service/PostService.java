@@ -49,6 +49,10 @@ public class PostService {
     public void updatePost(Long postId, UpdatePostRequest updatePostRequest) {
         Post postSaved = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("id 없음"));
 
+        if (!postSaved.getWriter().getUsername().equals(updatePostRequest.getWriter())) {
+            throw new IllegalArgumentException("게시글의 작성자가 아닙니다");
+        }
+
         if (postSaved.isValidPassword(updatePostRequest.getPassword())) {
             postSaved.update(updatePostRequest.getTitle(), updatePostRequest.getContent());
             postRepository.save(postSaved); // update 로 변경된 나머지를 다시 DB에 저장
@@ -60,11 +64,12 @@ public class PostService {
     @Transactional
     public void deletePost(Long postId, DeletePostRequest deletePostRequest) {
         Post postDelete = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("id 없음"));  // Controller 에서 받은 id 값 번째 게시글을 postSaved 선언(?)
-        if (postDelete.isValidPassword(deletePostRequest.getPassword())) {
-            postRepository.delete(postDelete);
-            System.out.println("success");
-        } else {
-            throw new IllegalArgumentException("패스워드가 다릅니다");
+
+        if (!postDelete.getWriter().getUsername().equals(deletePostRequest.getWriter())) {
+            throw new IllegalArgumentException("게시글의 작성자가 아닙니다");
         }
+
+        postRepository.delete(postDelete);
+        System.out.println("success");
     }
 }

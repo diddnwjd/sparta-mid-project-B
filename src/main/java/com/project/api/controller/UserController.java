@@ -29,6 +29,7 @@ public class UserController {
     public LoginUserResponse loginUser(@RequestBody LoginUserRequest loginUserRequest, HttpServletResponse response) {
         String generatedToken = userService.loginUser(loginUserRequest);
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, generatedToken);   // 요청에 대한 처리, 응답에 대한 처리는 여기서
+        System.out.println(response);
         return new LoginUserResponse(200L, "로그인 완료");
     }
 }
