@@ -6,5 +6,5 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class DeletePostRequest {
-    private String writer;
+    private String username;
 }

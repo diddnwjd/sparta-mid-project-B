@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdatePostRequest {
     private String title;
-    private String writer;
+    private String username;
     private String content;
-    private String password;
 }
