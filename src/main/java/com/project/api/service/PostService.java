@@ -36,8 +36,8 @@ public class PostService {
     }
 
     @Transactional
-    public PostResponse createPost(CreatePostRequest createPostRequest, String requestingUser) {
-        User user = userRepository.findByUsername(requestingUser).orElseThrow(() -> new IllegalArgumentException("동일한 유저가 아님"));
+    public PostResponse createPost(CreatePostRequest createPostRequest, String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("동일한 유저가 아님"));
         Post post = new Post(createPostRequest.getTitle(), user, createPostRequest.getPassword(), createPostRequest.getContent());
         postRepository.save(post);
         return new PostResponse(post);
@@ -51,10 +51,10 @@ public class PostService {
     }
 
     @Transactional
-    public PostResponse updatePost(Long postId, UpdatePostRequest updatePostRequest, String requestingUser) {
+    public PostResponse updatePost(Long postId, UpdatePostRequest updatePostRequest, String username) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("id 없음"));
 
-        if (!post.getWriter().equals(requestingUser)) {
+        if (!post.getWriter().equals(username)) {
             throw new IllegalArgumentException("게시글의 작성자가 아닙니다");
         }
 

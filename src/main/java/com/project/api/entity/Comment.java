@@ -15,17 +15,20 @@ public class Comment extends TimeStamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(targetEntity = Post.class)
-    @JoinColumn(name = "Post_id")
-    private Long postId;
+    @ManyToOne
+    @JoinColumn
+    private Post post;
 
     private String content;
-    private String writer;
-    private LocalDateTime createdAt;
 
-    public Comment(String content, String writer) {
+    @ManyToOne
+    @JoinColumn
+    private User writer;
+
+    public Comment(Post post, User user, String content ) {
+        this.post = post;
         this.content = content;
-        this.writer = writer;
+        this.writer = user;
     }
 
     private void update(String content) {

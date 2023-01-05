@@ -3,7 +3,7 @@ package com.project.api.entity;
 import lombok.Getter;
 
 import javax.persistence.*;
-
+import java.util.List;
 
 
 @Getter
@@ -12,12 +12,15 @@ public class Post extends TimeStamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    @JoinColumn(name ="post_id")
     private Long id;
+
+    @OneToMany
+    @JoinColumn(name ="post_id")
+    private List<Comment> comments;
+
     private String title;
 
-    @ManyToOne(targetEntity = User.class)
+    @ManyToOne
     @JoinColumn(name = "username")
     private User writer;
 
