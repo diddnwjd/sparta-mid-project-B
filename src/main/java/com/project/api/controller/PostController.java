@@ -1,9 +1,6 @@
 package com.project.api.controller;
 
-import com.project.api.dto.CreatePostRequest;
-import com.project.api.dto.DeletePostRequest;
-import com.project.api.dto.PostResponse;
-import com.project.api.dto.UpdatePostRequest;
+import com.project.api.dto.*;
 import com.project.api.entity.Post;
 import com.project.api.jwt.JwtUtil;
 import com.project.api.service.PostService;
@@ -24,7 +21,7 @@ public class PostController {
 
     // 전체 게시물 조회
     @GetMapping("/api/posts")
-    public List<PostResponse> getPosts() {
+    public List<PostCommentResponse> getPosts() {
         return postService.getPosts();
     }
 
@@ -37,15 +34,14 @@ public class PostController {
             if (jwtUtil.validateToken(token)) {
                 claims = jwtUtil.getUserInfoFromToken(token);
                 String requestingUser = claims.getSubject();
-                return postService.createPost(createPostRequest, requestingUser);
+                return postService.createPost(createPostRequxxxxest, requestingUser);
             } else { throw  new IllegalArgumentException("유효하지 않은 토큰"); }
         } else { throw new IllegalArgumentException("토큰값이 잘못됌"); }
-
     }
 
     // 선택 게시물 조회
     @GetMapping("/api/posts/{postId}")
-    public PostResponse getPost(@PathVariable Long postId) {
+    public List<PostCommentResponse> getPost(@PathVariable Long postId) {
         return postService.getPost(postId);
     }
 
@@ -57,8 +53,8 @@ public class PostController {
         if (token != null) {
             if (jwtUtil.validateToken(token)) {
                 claims = jwtUtil.getUserInfoFromToken(token);
-                String requestingUser = claims.getSubject();
-                return postService.updatePost(postId, updatePostRequest, requestingUser);
+                String username = claims.getSubject();
+                return postService.updatePost(postId, updatePostRequest, username);
             } else { throw  new IllegalArgumentException("유효하지 않은 토큰"); }
         } else { throw new IllegalArgumentException("토큰값이 잘못됌"); }
     }
