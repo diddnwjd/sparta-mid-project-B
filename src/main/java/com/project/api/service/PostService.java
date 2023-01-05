@@ -8,12 +8,10 @@ import com.project.api.jwt.JwtUtil;
 import com.project.api.repository.CommentRepository;
 import com.project.api.repository.PostRepository;
 import com.project.api.repository.UserRepository;
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 

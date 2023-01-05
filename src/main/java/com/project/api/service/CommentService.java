@@ -3,21 +3,16 @@ package com.project.api.service;
 import com.project.api.dto.CommentResponse;
 import com.project.api.dto.CreateCommnetRequest;
 
-import com.project.api.dto.PostResponse;
+import com.project.api.dto.UpdateCommentRequest;
 import com.project.api.entity.Comment;
 import com.project.api.entity.Post;
 import com.project.api.entity.User;
-import com.project.api.entity.UserRoleEnum;
 import com.project.api.repository.CommentRepository;
 import com.project.api.repository.PostRepository;
 import com.project.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +31,25 @@ public class CommentService {
         return new CommentResponse(comment);
     }
 
+    @Transactional
+    public CommentResponse updateComment(Long postId, Long commentId, UpdateCommentRequest updateCommentRequest, String username) {
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new IllegalArgumentException("게시글이 없습니다.")
+        );
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new IllegalArgumentException("사용자가 없습니다.")
+        );
+        Comment comment = commentRepository.findById(commentId).orElseThrow(
+                () -> new IllegalArgumentException("id가 존재하지 않습니다.")
+        );
+        if (!comment.getWriter().getUsername().equals(username)) {
+            throw new IllegalArgumentException("게시글의 작성자가 아닙니다.");
+        }
 
+        comment.update(post, user, updateCommentRequest.getContent());
+        commentRepository.save(comment);
+        return new CommentResponse(comment);
+    }
 
     @Transactional
     public void deleteComment(Long postId, Long commentId, String username) {

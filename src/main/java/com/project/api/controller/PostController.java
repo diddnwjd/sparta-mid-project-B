@@ -1,7 +1,6 @@
 package com.project.api.controller;
 
 import com.project.api.dto.*;
-import com.project.api.entity.Post;
 import com.project.api.jwt.JwtUtil;
 import com.project.api.service.PostService;
 
@@ -9,7 +8,6 @@ import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.Column;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -34,9 +32,9 @@ public class PostController {
             if (jwtUtil.validateToken(token)) {
                 claims = jwtUtil.getUserInfoFromToken(token);
                 String requestingUser = claims.getSubject();
-                return postService.createPost(createPostRequxxxxest, requestingUser);
+                return postService.createPost(createPostRequest, requestingUser);
             } else { throw  new IllegalArgumentException("유효하지 않은 토큰"); }
-        } else { throw new IllegalArgumentException("토큰값이 잘못됌"); }
+        } else { throw new IllegalArgumentException("토큰값이 잘못됨"); }
     }
 
     // 선택 게시물 조회
@@ -56,7 +54,7 @@ public class PostController {
                 String username = claims.getSubject();
                 return postService.updatePost(postId, updatePostRequest, username);
             } else { throw  new IllegalArgumentException("유효하지 않은 토큰"); }
-        } else { throw new IllegalArgumentException("토큰값이 잘못됌"); }
+        } else { throw new IllegalArgumentException("토큰값이 잘못됨"); }
     }
 
     @DeleteMapping("/api/posts/{postId}")
@@ -69,6 +67,6 @@ public class PostController {
                 String username = claims.getSubject();
                 postService.deletePost(postId, deletePostRequest, username);
             } else { throw  new IllegalArgumentException("유효하지 않은 토큰"); }
-        } else { throw new IllegalArgumentException("토큰값이 잘못됌"); }
+        } else { throw new IllegalArgumentException("토큰값이 잘못됨"); }
     }
 }
