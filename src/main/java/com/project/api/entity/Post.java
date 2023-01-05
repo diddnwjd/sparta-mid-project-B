@@ -3,8 +3,8 @@ package com.project.api.entity;
 import lombok.Getter;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+
+
 
 @Getter
 @Entity
@@ -13,6 +13,7 @@ public class Post extends TimeStamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
+    @JoinColumn(name ="post_id")
     private Long id;
     private String title;
 

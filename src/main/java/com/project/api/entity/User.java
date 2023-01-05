@@ -13,7 +13,10 @@ import javax.validation.constraints.Pattern;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Column(name = "commnet_id")
     private Long id;
+
     @Column(nullable = false, unique = true)
     private String username;
 
