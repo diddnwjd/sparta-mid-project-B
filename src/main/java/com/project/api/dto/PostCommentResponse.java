@@ -1,6 +1,5 @@
 package com.project.api.dto;
 
-import com.project.api.entity.Comment;
 import com.project.api.entity.Post;
 import lombok.Getter;
 

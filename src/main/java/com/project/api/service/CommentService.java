@@ -3,22 +3,16 @@ package com.project.api.service;
 import com.project.api.dto.CommentResponse;
 import com.project.api.dto.CreateCommnetRequest;
 
-import com.project.api.dto.PostResponse;
 import com.project.api.dto.UpdateCommentRequest;
 import com.project.api.entity.Comment;
 import com.project.api.entity.Post;
 import com.project.api.entity.User;
-import com.project.api.entity.UserRoleEnum;
 import com.project.api.repository.CommentRepository;
 import com.project.api.repository.PostRepository;
 import com.project.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-
 
 @Service
 @RequiredArgsConstructor

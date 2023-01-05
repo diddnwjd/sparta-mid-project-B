@@ -1,6 +1,5 @@
 package com.project.api.dto;
 
-import com.project.api.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
