@@ -33,7 +33,6 @@ public class Post extends TimeStamped {
 
         this.title = title;
         this.writer = writer;
-        this.password = password;
         this.content = content;
     }
 
@@ -41,13 +40,5 @@ public class Post extends TimeStamped {
 
         this.title = title;
         this.content = content;
-    }
-
-    public boolean isValidPassword(String inputPassword) {
-        if (inputPassword.equals(this.password)) {
-            return true;
-        } else {
-            return false;
-        }
     }
 }
