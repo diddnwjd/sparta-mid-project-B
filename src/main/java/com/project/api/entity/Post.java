@@ -13,6 +13,7 @@ public class Post extends TimeStamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
+    @JoinColumn(name ="post_id")
     private Long id;
     private String title;
 
