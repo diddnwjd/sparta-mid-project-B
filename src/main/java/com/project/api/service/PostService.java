@@ -1,12 +1,11 @@
 package com.project.api.service;
 
-import com.project.api.dto.CreatePostRequest;
-import com.project.api.dto.DeletePostRequest;
-import com.project.api.dto.PostResponse;
-import com.project.api.dto.UpdatePostRequest;
+import com.project.api.dto.*;
+import com.project.api.entity.Comment;
 import com.project.api.entity.Post;
 import com.project.api.entity.User;
 import com.project.api.jwt.JwtUtil;
+import com.project.api.repository.CommentRepository;
 import com.project.api.repository.PostRepository;
 import com.project.api.repository.UserRepository;
 import io.jsonwebtoken.Claims;
@@ -23,14 +22,21 @@ import java.util.List;
 public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
     private final JwtUtil jwtUtil;
 
     @Transactional
-    public List<PostResponse> getPosts() {
+    public List<PostCommentResponse> getPosts() {
         List<Post> posts = postRepository.findAllByOrderByCreateAt();
-        List<PostResponse> postResponsesList = new ArrayList<>();
+        List<PostCommentResponse> postResponsesList = new ArrayList<>();
+
         for (Post post : posts) {
-            postResponsesList.add(new PostResponse(post));
+            List<Comment> comments = commentRepository.findByPost_IdOrderByCreateAtDesc(post.getId());
+            List<CommentResponse> commentResponseList = new ArrayList<>();
+            for (Comment comment : comments) {
+                commentResponseList.add(new CommentResponse(comment));
+            }
+            postResponsesList.add(new PostCommentResponse(post, commentResponseList));
         }
         return postResponsesList;
     }
@@ -45,16 +51,25 @@ public class PostService {
 
 
     @Transactional
-    public PostResponse getPost(Long postId) {
+    public List<PostCommentResponse> getPost(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("id 없음"));
-        return new PostResponse(post);
+        List<PostCommentResponse> postResponsesList = new ArrayList<>();
+
+        List<Comment> comments = commentRepository.findByPost_IdOrderByCreateAtDesc(postId);
+        List<CommentResponse> commentResponseList = new ArrayList<>();
+        for (Comment comment : comments) {
+            commentResponseList.add(new CommentResponse(comment));
+        }
+        postResponsesList.add(new PostCommentResponse(post, commentResponseList));
+        return postResponsesList;
     }
 
     @Transactional
     public PostResponse updatePost(Long postId, UpdatePostRequest updatePostRequest, String username) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("id 없음"));
 
-        if (!post.getWriter().equals(username)) {
+        System.out.println(post.getWriter().getUsername());
+        if (!post.getWriter().getUsername().equals(username)) {
             throw new IllegalArgumentException("게시글의 작성자가 아닙니다");
         }
 
@@ -67,7 +82,7 @@ public class PostService {
     public void deletePost(Long postId, DeletePostRequest deletePostRequest, String username) {
         Post postDelete = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("id 없음"));  // Controller 에서 받은 id 값 번째 게시글을 postSaved 선언(?)
 
-        if (!postDelete.getWriter().equals(username)) {
+        if (!postDelete.getWriter().getUsername().equals(username)) {
             throw new IllegalArgumentException("게시글의 작성자가 아닙니다");
         }
 
