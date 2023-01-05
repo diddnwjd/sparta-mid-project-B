@@ -3,8 +3,8 @@ package com.project.api.entity;
 import lombok.Getter;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+
+
 
 @Getter
 @Entity

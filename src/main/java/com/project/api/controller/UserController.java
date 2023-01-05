@@ -9,6 +9,7 @@ import com.project.api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +19,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final JwtUtil jwtUtil;
 
     @PostMapping("/api/signup")
     public CreateUserResponse createUser(@RequestBody @Valid CreateUserRequest createUserRequest) {
@@ -27,8 +29,8 @@ public class UserController {
 
     @PostMapping("/api/login")
     public LoginUserResponse loginUser(@RequestBody LoginUserRequest loginUserRequest, HttpServletResponse response) {
-        String generatedToken = userService.loginUser(loginUserRequest);
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, generatedToken);   // 요청에 대한 처리, 응답에 대한 처리는 여기서
+        String generatedToken = userService.loginUser(loginUserRequest);   // 요청에 대한 처리, 응답에 대한 처리는 여기서
+        response.addHeader(jwtUtil.AUTHORIZATION_HEADER, generatedToken);
         return new LoginUserResponse(200L, "로그인 완료");
     }
 }
